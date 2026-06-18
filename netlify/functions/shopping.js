@@ -1,9 +1,21 @@
 // Shopping Advisor — eco-alternatives for product categories
 exports.handler = async (event) => {
+  const origin = event.headers.origin || event.headers.Origin || "";
+  const allowedOrigins = [
+    "https://elegant-parfait-4cc2a7.netlify.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ];
+  const allowOrigin = allowedOrigins.includes(origin) ? origin : "https://elegant-parfait-4cc2a7.netlify.app";
+
   const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers": "Content-Type",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
   };
 
   if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
@@ -11,7 +23,9 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || "{}");
-    const cat = (body.category || "").toLowerCase().trim();
+    const rawCat = String(body.category || "");
+    const sanitizedCatName = rawCat.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const cat = sanitizedCatName.toLowerCase().trim();
 
     let result;
     if (cat.includes("shoe") || cat.includes("sneaker") || cat.includes("boot")) {
@@ -60,7 +74,7 @@ exports.handler = async (event) => {
       };
     } else {
       result = {
-        category: body.category || "Product",
+        category: sanitizedCatName || "Product",
         estimated_impact: "Medium. Standard products consume raw resources and shipping fuels.",
         co2_estimate: 20.0,
         explanation: "General manufacturing relies heavily on fossil fuel grids.",

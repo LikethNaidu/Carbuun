@@ -1,9 +1,21 @@
 // Smart AI Chat — contextual sustainability coaching
 exports.handler = async (event) => {
+  const origin = event.headers.origin || event.headers.Origin || "";
+  const allowedOrigins = [
+    "https://elegant-parfait-4cc2a7.netlify.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ];
+  const allowOrigin = allowedOrigins.includes(origin) ? origin : "https://elegant-parfait-4cc2a7.netlify.app";
+
   const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers": "Content-Type",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
   };
 
   if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
@@ -11,7 +23,9 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || "{}");
-    const msg = (body.message || "").toLowerCase();
+    const rawMsg = String(body.message || "");
+    const sanitizedMsg = rawMsg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const msg = sanitizedMsg.toLowerCase();
     const co2_transport = parseFloat(body.co2_transport) || 150;
     const co2_electricity = parseFloat(body.co2_electricity) || 80;
     const co2_food = parseFloat(body.co2_food) || 180;
@@ -35,29 +49,30 @@ exports.handler = async (event) => {
 
     } else if (["travel", "transport", "car", "drive", "commut", "bus", "train"].some(x => msg.includes(x))) {
       if (["car_petrol", "car_diesel"].includes(transport_mode) && travel_dist > 15) {
-        reply = `You commute **${travel_dist} km/day** by ${transport_mode.replace("_", " ")}, generating **${co2_transport.toFixed(1)} kg CO₂/month** — your largest footprint component. Switching to public transport twice a week could save ~**${(co2_transport * 0.28).toFixed(1)} kg CO₂/month**.`;
+        const diffText = co2_transport > 120 ? "above the average commuter transport footprint of 120 kg CO₂" : "under the average commuter transport footprint of 120 kg CO₂";
+        reply = `You commute **${travel_dist} km/day** by ${transport_mode.replace("_", " ")}, generating **${co2_transport.toFixed(1)} kg CO₂/month** — which is ${diffText}. Switching to public transport twice a week could save ~**${(co2_transport * 0.28).toFixed(1)} kg CO₂/month**.`;
         insights.push("High transport emissions — action recommended.");
       } else {
-        reply = `Your transport emissions are already low at **${co2_transport.toFixed(1)} kg CO₂/month**. You use ${transport_mode.replace("_", " ")} — excellent! Focus your efforts on food or energy instead.`;
+        reply = `Your transport emissions are already low at **${co2_transport.toFixed(1)} kg CO₂/month** (below the typical commuter average of 120 kg CO₂). You use ${transport_mode.replace("_", " ")} — excellent! Focus your efforts on food or energy instead.`;
         insights.push("Low transport emissions. Consider energy or diet improvements.");
       }
 
     } else if (["electric", "energy", "power", "bill", "light"].some(x => msg.includes(x))) {
       if (co2_electricity > 70) {
-        reply = `Your electricity footprint is **${co2_electricity.toFixed(1)} kg CO₂/month**. Start with LED bulbs, smart power strips to cut standby power, and thermostat optimization (2°C adjustment saves up to 15%).`;
+        reply = `Your electricity footprint is **${co2_electricity.toFixed(1)} kg CO₂/month** (compared to a typical low-carbon target of 40 kg CO₂/month). Start with LED bulbs, smart power strips to cut standby power, and thermostat optimization (2°C adjustment saves up to 15%).`;
         insights.push("High energy emissions detected.");
       } else {
-        reply = `Your electricity emissions are a modest **${co2_electricity.toFixed(1)} kg CO₂/month**. To reduce further, check 'phantom loads' and ask your utility provider about 100% renewable plans.`;
+        reply = `Your electricity emissions are a modest **${co2_electricity.toFixed(1)} kg CO₂/month** (well below the global average household share of 85 kg CO₂/month). To reduce further, check 'phantom loads' and ask your utility provider about 100% renewable plans.`;
         insights.push("Electricity within moderate range.");
       }
 
     } else if (["food", "diet", "meat", "eat", "vegan", "vegetarian"].some(x => msg.includes(x))) {
       if (["meat_heavy", "meat_medium"].includes(food_preference)) {
         const saving = food_preference === "meat_heavy" ? 80 : 40;
-        reply = `Your food footprint is **${co2_food.toFixed(1)} kg CO₂/month** from your meat-inclusive diet. Switching to vegetarian meals 3 days/week saves ~**${saving} kg CO₂/month** — and often saves money too!`;
+        reply = `Your food footprint is **${co2_food.toFixed(1)} kg CO₂/month** from your meat-inclusive diet. For comparison, a standard plant-based vegetarian diet is only 100 kg CO₂/month. Replaces meat meals with vegetarian options 3 days/week saves ~**${saving} kg CO₂/month** — and often saves money!`;
         insights.push("Diet change has high impact potential.");
       } else {
-        reply = `Excellent! Your plant-based diet keeps food emissions at just **${co2_food.toFixed(1)} kg CO₂/month**. To optimize further, reduce food waste through meal planning and freezing leftovers.`;
+        reply = `Excellent! Your plant-based diet keeps food emissions at just **${co2_food.toFixed(1)} kg CO₂/month** (60% lower than an average meat-inclusive diet of 180 kg CO₂/month). To optimize further, reduce food waste through meal planning and freezing leftovers.`;
         insights.push("Plant-based diet is highly optimal.");
       }
 

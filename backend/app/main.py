@@ -16,7 +16,11 @@ app = FastAPI(title="GreenGuide AI API", version="1.0.0")
 # CORS middleware config
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict to frontend domain
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://elegant-parfait-4cc2a7.netlify.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

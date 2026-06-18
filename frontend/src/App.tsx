@@ -318,7 +318,7 @@ function App() {
       )}
 
       {/* Navigation Tabs */}
-      <nav className="flex flex-wrap gap-3">
+      <nav className="flex flex-wrap gap-3" role="tablist" aria-label="Dashboard Features">
         {[
           { id: "calculator", label: "🌍 Calculator", color: "hover:bg-neoYellow" },
           { id: "recommendations", label: "💡 Recommendations", color: "hover:bg-neoGreen" },
@@ -333,8 +333,12 @@ function App() {
           return (
             <button
               key={tab.id}
+              id={`tab-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`border-3 border-black px-4 py-2.5 font-display font-bold rounded-lg shadow-neoSm transition-all active:translate-x-0 active:translate-y-0 active:shadow-neoSm ${
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`panel-${tab.id}`}
+              className={`border-3 border-black px-4 py-2.5 font-display font-bold rounded-lg shadow-neoSm transition-all active:translate-x-0 active:translate-y-0 active:shadow-neoSm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 ${
                 isActive
                   ? "bg-neoDark text-white translate-x-0.5 translate-y-0.5 shadow-none"
                   : `bg-white text-neoDark hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo ${tab.color}`
@@ -347,7 +351,12 @@ function App() {
       </nav>
 
       {/* Main View Shell */}
-      <main className="min-h-[500px]">
+      <main
+        className="min-h-[500px]"
+        role="tabpanel"
+        id={`panel-${activeTab}`}
+        aria-labelledby={`tab-${activeTab}`}
+      >
         {activeTab === "calculator" && (
           <CalculatorView
             onCalculate={handleCalculate}

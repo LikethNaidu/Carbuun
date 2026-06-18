@@ -63,3 +63,30 @@ def test_badge_level():
     assert get_badge_level(75) == "🌳 Carbon Champion"
     assert get_badge_level(55) == "🌿 Eco Explorer"
     assert get_badge_level(30) == "🌱 Green Starter"
+
+def test_footprint_schema_validation():
+    import pytest
+    from pydantic import ValidationError
+    from backend.app.schemas.schemas import FootprintCreate
+
+    # Test negative travel distance raises Validation Error
+    with pytest.raises(ValidationError):
+        FootprintCreate(
+            travel_dist=-5.0,
+            transport_mode="car_petrol",
+            electricity_bill=50.0,
+            food_preference="vegetarian",
+            shopping_freq="low",
+            household_size=1
+        )
+
+    # Test invalid household size (< 1) raises Validation Error
+    with pytest.raises(ValidationError):
+        FootprintCreate(
+            travel_dist=10.0,
+            transport_mode="car_petrol",
+            electricity_bill=50.0,
+            food_preference="vegetarian",
+            shopping_freq="low",
+            household_size=0
+        )

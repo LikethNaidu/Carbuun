@@ -68,25 +68,25 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           <div className="space-y-2">
             <button
               onClick={() => setInput("How is my travel footprint looking?")}
-              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoOrange hover:text-white transition-all text-neoDark"
+              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoOrange hover:text-white transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
               🚗 Travel footprint analysis
             </button>
             <button
               onClick={() => setInput("Tips for reducing my home electricity emissions?")}
-              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoYellow hover:text-black transition-all text-neoDark"
+              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoYellow hover:text-black transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
               ⚡ Electricity saving advice
             </button>
             <button
               onClick={() => setInput("What impact does my food preference have?")}
-              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoGreen hover:text-black transition-all text-neoDark"
+              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoGreen hover:text-black transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
               🥩 Meat vs Plant diet impact
             </button>
             <button
               onClick={() => setInput("Am I exceeding my carbon budget limits?")}
-              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoBlue hover:text-white transition-all text-neoDark"
+              className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoBlue hover:text-white transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
               📊 Check budget limits
             </button>
@@ -110,7 +110,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         </div>
 
         {/* Messages Body */}
-        <div className="flex-1 p-4 overflow-y-auto bg-neoBackground space-y-4">
+        <div className="flex-1 p-4 overflow-y-auto bg-neoBackground space-y-4" aria-live="polite" aria-relevant="additions">
           {chatHistory.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-6">
               <span className="text-5xl mb-3">💬</span>
@@ -179,15 +179,16 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           <input
             type="text"
             value={input}
+            aria-label="Sustainability question"
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your sustainability question..."
-            className="flex-1 border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold"
+            className="flex-1 border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold"
             disabled={loading}
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="bg-neoGreen text-black border-3 border-black font-display font-bold px-5 py-2.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 disabled:opacity-50"
+            className="bg-neoGreen text-black border-3 border-black font-display font-bold px-5 py-2.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 disabled:opacity-50"
           >
             Send →
           </button>

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 from datetime import datetime
 
@@ -27,8 +27,7 @@ class FootprintResponse(BaseModel):
     sustainability_score: float
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class BudgetUpdate(BaseModel):
     budget_transport: float = Field(..., ge=0)
@@ -44,8 +43,7 @@ class BudgetResponse(BaseModel):
     budget_shopping: float
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class RecommendationItem(BaseModel):
     category: str

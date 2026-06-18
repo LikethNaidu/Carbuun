@@ -44,16 +44,17 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({
           <input
             type="text"
             value={query}
+            aria-label="Product category to search"
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search category (e.g., Running Shoes, Jeans, Smartphone...)"
-            className="flex-grow border-3 border-black p-3.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold"
+            className="flex-grow border-3 border-black p-3.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold"
             required
             disabled={loading}
           />
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            className="bg-neoYellow text-black border-3 border-black font-display font-bold px-6 py-3.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 disabled:opacity-50"
+            className="bg-neoYellow text-black border-3 border-black font-display font-bold px-6 py-3.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 disabled:opacity-50"
           >
             {loading ? "Analyzing..." : "Analyze Impact →"}
           </button>
@@ -61,7 +62,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({
       </div>
 
       {result && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" aria-live="polite" aria-relevant="additions">
           {/* Product Impact Summary Card */}
           <div className="bg-white border-3 border-black p-6 rounded-xl shadow-neo lg:col-span-1 flex flex-col justify-between">
             <div>

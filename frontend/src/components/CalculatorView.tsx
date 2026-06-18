@@ -115,7 +115,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               step="any"
               value={formData.travel_dist}
               onChange={handleChange}
-              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold"
+              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold"
               required
             />
           </div>
@@ -132,7 +132,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               name="transport_mode"
               value={formData.transport_mode}
               onChange={handleChange}
-              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold bg-white"
+              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold bg-white"
             >
               <option value="car_petrol">🚗 Petrol Car</option>
               <option value="car_diesel">🚗 Diesel Car</option>
@@ -158,7 +158,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               step="any"
               value={formData.electricity_bill}
               onChange={handleChange}
-              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold"
+              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold"
               required
             />
           </div>
@@ -175,7 +175,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               name="food_preference"
               value={formData.food_preference}
               onChange={handleChange}
-              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold bg-white"
+              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold bg-white"
             >
               <option value="meat_heavy">🥩 Heavy Meat Eater</option>
               <option value="meat_medium">🍖 Average Meat/Fish Eater</option>
@@ -196,7 +196,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               name="shopping_freq"
               value={formData.shopping_freq}
               onChange={handleChange}
-              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold bg-white"
+              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold bg-white"
             >
               <option value="high">🛍️ High (Frequent purchases/fast fashion)</option>
               <option value="medium">🛒 Medium (Average consumer buying habits)</option>
@@ -218,7 +218,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               min="1"
               value={formData.household_size}
               onChange={handleChange}
-              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus:bg-yellow-50 font-bold"
+              className="w-full border-3 border-black p-2.5 rounded-lg focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 focus:bg-yellow-50 font-bold"
               required
             />
           </div>
@@ -226,7 +226,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-neoGreen text-black border-3 border-black font-display font-bold py-3 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 active:shadow-neo disabled:opacity-50"
+            className="w-full bg-neoGreen text-black border-3 border-black font-display font-bold py-3 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 active:shadow-neo focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2 disabled:opacity-50"
           >
             {loading ? "Calculating..." : "Calculate Carbon Footprint →"}
           </button>

@@ -230,7 +230,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                 type="number"
                 value={formData.budget_transport}
                 onChange={handleChange}
-                className="w-full border-3 border-black p-2 rounded-lg font-bold"
+                className="w-full border-3 border-black p-2 rounded-lg font-bold focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
                 required
               />
             </div>
@@ -244,7 +244,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                 type="number"
                 value={formData.budget_electricity}
                 onChange={handleChange}
-                className="w-full border-3 border-black p-2 rounded-lg font-bold"
+                className="w-full border-3 border-black p-2 rounded-lg font-bold focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
                 required
               />
             </div>
@@ -258,7 +258,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                 type="number"
                 value={formData.budget_food}
                 onChange={handleChange}
-                className="w-full border-3 border-black p-2 rounded-lg font-bold"
+                className="w-full border-3 border-black p-2 rounded-lg font-bold focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
                 required
               />
             </div>
@@ -272,7 +272,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                 type="number"
                 value={formData.budget_shopping}
                 onChange={handleChange}
-                className="w-full border-3 border-black p-2 rounded-lg font-bold"
+                className="w-full border-3 border-black p-2 rounded-lg font-bold focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
                 required
               />
             </div>
@@ -281,14 +281,14 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-neoGreen text-black border-3 border-black font-bold py-2 rounded-lg shadow-neo hover:translate-y-[-1px] transition-all"
+                className="flex-1 bg-neoGreen text-black border-3 border-black font-bold py-2 rounded-lg shadow-neo hover:translate-y-[-1px] transition-all focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
               >
                 Save
               </button>
               <button
                 type="button"
                 onClick={() => setEditMode(false)}
-                className="flex-1 bg-gray-200 text-black border-3 border-black font-bold py-2 rounded-lg shadow-neo hover:translate-y-[-1px] transition-all"
+                className="flex-1 bg-gray-200 text-black border-3 border-black font-bold py-2 rounded-lg shadow-neo hover:translate-y-[-1px] transition-all focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
               >
                 Cancel
               </button>
@@ -323,7 +323,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </div>
             <button
               onClick={() => setEditMode(true)}
-              className="w-full bg-neoYellow text-black border-3 border-black font-display font-bold py-2.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0"
+              className="w-full bg-neoYellow text-black border-3 border-black font-display font-bold py-2.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
             >
               ⚙ Edit Budget Targets
             </button>

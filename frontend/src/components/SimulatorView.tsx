@@ -79,7 +79,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
               onChange={(e) =>
                 handleSliderChange("public_transport_days", parseInt(e.target.value))
               }
-              className="w-full accent-neoOrange h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer border-3 border-black"
+              className="w-full accent-neoOrange h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer border-3 border-black focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
             />
             <p className="text-xs text-gray-400 mt-1 font-bold">
               Original commute: {latestFootprint?.transport_mode.replace("_", " ")} ({latestFootprint?.travel_dist} km/day)
@@ -105,7 +105,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
               onChange={(e) =>
                 handleSliderChange("electricity_reduction_pct", parseInt(e.target.value))
               }
-              className="w-full accent-neoYellow h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer border-3 border-black"
+              className="w-full accent-neoYellow h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer border-3 border-black focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
             />
             <p className="text-xs text-gray-400 mt-1 font-bold">
               E.g., Turn off standby power, optimize AC/heating, use solar.
@@ -131,7 +131,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
               onChange={(e) =>
                 handleSliderChange("vegetarian_days", parseInt(e.target.value))
               }
-              className="w-full accent-neoGreen h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer border-3 border-black"
+              className="w-full accent-neoGreen h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer border-3 border-black focus:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
             />
             <p className="text-xs text-gray-400 mt-1 font-bold">
               Substitute meat meals with plant-based alternatives.
