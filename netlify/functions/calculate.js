@@ -23,12 +23,10 @@ const EMISSION_FACTORS = {
 
 exports.handler = async (event) => {
   const origin = event.headers.origin || event.headers.Origin || "";
-  const allowedOrigins = [
-    "https://elegant-parfait-4cc2a7.netlify.app",
-    "http://localhost:5173",
-    "http://localhost:3000"
-  ];
-  const allowOrigin = allowedOrigins.includes(origin) ? origin : "https://elegant-parfait-4cc2a7.netlify.app";
+  let allowOrigin = "https://elegant-parfait-4cc2a7.netlify.app";
+  if (origin.includes("localhost") || origin.includes("127.0.0.1") || origin === "https://elegant-parfait-4cc2a7.netlify.app") {
+    allowOrigin = origin;
+  }
 
   const headers = {
     "Content-Type": "application/json",
