@@ -1,0 +1,23 @@
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "../netlify/functions"
+  node_bundler = "esbuild"
+
+# Redirect all /api/* calls to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA fallback routing — sends all unmatched routes to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "22"

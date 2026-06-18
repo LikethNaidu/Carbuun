@@ -18,7 +18,12 @@ import { AssistantView } from "./components/AssistantView";
 import { ProgressView } from "./components/ProgressView";
 import { CommunityView } from "./components/CommunityView";
 
-const API_BASE_URL = "http://localhost:8000/api";
+// In production (Netlify), use /.netlify/functions/*. In local dev, use FastAPI backend.
+const IS_NETLIFY = !import.meta.env.DEV;
+const API_BASE_URL = IS_NETLIFY ? "" : "http://localhost:8000/api";
+const API = (path: string) =>
+  IS_NETLIFY ? `/.netlify/functions/${path.replace(/^\//, "")}` : `${API_BASE_URL}/${path.replace(/^\//, "")}`;
+
 
 function App() {
   const [activeTab, setActiveTab] = useState<string>("calculator");
@@ -40,25 +45,44 @@ function App() {
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Fetch footprint history
+  // Fetch footprint history — uses localStorage on Netlify (stateless), DB on local dev
   const fetchHistory = useCallback(async () => {
+    if (IS_NETLIFY) {
+      // Load from localStorage for stateless Netlify deployment
+      try {
+        const stored = localStorage.getItem("gg_history");
+        if (stored) {
+          const data = JSON.parse(stored) as FootprintData[];
+          setHistory(data);
+          if (data.length > 0) setLatestFootprint(data[data.length - 1]);
+        }
+      } catch { /* ignore */ }
+      return;
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/history`);
       if (!res.ok) throw new Error("Failed to fetch history");
       const data = await res.json();
       setHistory(data);
-      if (data.length > 0) {
-        setLatestFootprint(data[data.length - 1]);
-      }
+      if (data.length > 0) setLatestFootprint(data[data.length - 1]);
     } catch (err) {
       console.error(err);
       setErrorMsg("Unreachable server. Please ensure Python FastAPI backend is running.");
     }
   }, []);
 
-  // Fetch carbon budget
+  // Fetch carbon budget — uses localStorage on Netlify
   const fetchBudget = useCallback(async () => {
     setLoading((prev) => ({ ...prev, budget: true }));
+    if (IS_NETLIFY) {
+      try {
+        const stored = localStorage.getItem("gg_budget");
+        if (stored) setBudget(JSON.parse(stored) as CarbonBudget);
+        else setBudget({ budget_transport: 150, budget_electricity: 100, budget_food: 120, budget_shopping: 60 });
+      } catch { /* ignore */ }
+      setLoading((prev) => ({ ...prev, budget: false }));
+      return;
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/budget`);
       if (!res.ok) throw new Error("Failed to fetch budget");
@@ -71,11 +95,15 @@ function App() {
     }
   }, []);
 
-  // Fetch recommendations
-  const fetchRecommendations = useCallback(async () => {
+  // Fetch recommendations — POST with context on Netlify
+  const fetchRecommendations = useCallback(async (fp?: FootprintData) => {
     setLoading((prev) => ({ ...prev, recommendations: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/recommendations`);
+      const method = IS_NETLIFY ? "POST" : "GET";
+      const opts: RequestInit = IS_NETLIFY && fp
+        ? { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(fp) }
+        : {};
+      const res = await fetch(IS_NETLIFY ? API("recommendations") : `${API_BASE_URL}/recommendations`, opts);
       if (!res.ok) throw new Error("Failed to fetch recommendations");
       const data = await res.json();
       setRecommendations(data);
@@ -90,7 +118,7 @@ function App() {
   const fetchCommunityStats = useCallback(async () => {
     setLoading((prev) => ({ ...prev, community: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/community`);
+      const res = await fetch(API("community"));
       if (!res.ok) throw new Error("Failed to fetch community stats");
       const data = await res.json();
       setCommunityStats(data);
@@ -114,41 +142,50 @@ function App() {
     setLoading((prev) => ({ ...prev, calculator: true }));
     setErrorMsg(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/calculate`, {
+      const res = await fetch(API("calculate"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
       });
       if (!res.ok) throw new Error("Failed to calculate footprint");
       const data = await res.json();
-      
-      // Update history list and latest footprint
-      setHistory((prev) => {
-        // If updating or re-calculating, we append or update
-        const exists = prev.some((x) => x.id === data.id);
-        if (exists) {
-          return prev.map((x) => (x.id === data.id ? data : x));
-        }
-        return [...prev, data];
-      });
+
+      // Persist to localStorage on Netlify
+      if (IS_NETLIFY) {
+        const stored = localStorage.getItem("gg_history");
+        const existing: FootprintData[] = stored ? JSON.parse(stored) : [];
+        const updated = [...existing, { ...data, id: Date.now() }];
+        localStorage.setItem("gg_history", JSON.stringify(updated));
+        setHistory(updated);
+      } else {
+        setHistory((prev) => {
+          const exists = prev.some((x) => x.id === data.id);
+          if (exists) return prev.map((x) => (x.id === data.id ? data : x));
+          return [...prev, data];
+        });
+      }
       setLatestFootprint(data);
-      
-      // Refresh recommendations and budget since user profile changed
-      fetchRecommendations();
+      fetchRecommendations(data);
       fetchCommunityStats();
       return data;
     } catch (err) {
       console.error(err);
-      setErrorMsg("Calculation failed. Backend server connection error.");
+      setErrorMsg("Calculation failed. Make sure the backend is reachable.");
       return null;
     } finally {
       setLoading((prev) => ({ ...prev, calculator: false }));
     }
   };
 
-  // Handle budget limit updates
+  // Handle budget limit updates — localStorage on Netlify
   const handleUpdateBudget = async (newBudget: CarbonBudget): Promise<CarbonBudget | null> => {
     setLoading((prev) => ({ ...prev, budget: true }));
+    if (IS_NETLIFY) {
+      localStorage.setItem("gg_budget", JSON.stringify(newBudget));
+      setBudget(newBudget);
+      setLoading((prev) => ({ ...prev, budget: false }));
+      return newBudget;
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/budget`, {
         method: "PUT",
@@ -175,10 +212,14 @@ function App() {
     vegetarian_days: number;
   }): Promise<SimulationResult | null> => {
     try {
-      const res = await fetch(`${API_BASE_URL}/simulate`, {
+      // Pass user context for stateless Netlify function
+      const body = IS_NETLIFY && latestFootprint
+        ? { ...inputs, ...latestFootprint }
+        : inputs;
+      const res = await fetch(API("simulate"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(inputs),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error("Simulation request failed");
       return await res.json();
@@ -192,7 +233,7 @@ function App() {
   const handleGetShoppingAdvice = async (category: string): Promise<ShoppingAdvice | null> => {
     setLoading((prev) => ({ ...prev, shopping: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/shopping`, {
+      const res = await fetch(API("shopping"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category }),
@@ -213,10 +254,14 @@ function App() {
   ): Promise<{ reply: string; insights: string[] } | null> => {
     setLoading((prev) => ({ ...prev, chat: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/chat`, {
+      // For Netlify (stateless), pass user context in the request body
+      const chatBody = IS_NETLIFY && latestFootprint
+        ? { message, ...latestFootprint }
+        : { message };
+      const res = await fetch(API("chat"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify(chatBody),
       });
       if (!res.ok) throw new Error("Chat request failed");
       return await res.json();
