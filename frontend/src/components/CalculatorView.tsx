@@ -81,10 +81,10 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
   };
 
   const getScoreBadgeText = (score: number) => {
-    if (score >= 85) return "🏆 Climate Hero";
-    if (score >= 65) return "🌳 Carbon Champion";
-    if (score >= 45) return "🌿 Eco Explorer";
-    return "🌱 Green Starter";
+    if (score >= 85) return { emoji: "🏆", label: "Climate Hero" };
+    if (score >= 65) return { emoji: "🌳", label: "Carbon Champion" };
+    if (score >= 45) return { emoji: "🌿", label: "Eco Explorer" };
+    return { emoji: "🌱", label: "Green Starter" };
   };
 
   return (
@@ -96,7 +96,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
         </h2>
         {validationError && (
           <div className="bg-neoOrange text-white border-3 border-black p-3 rounded-lg shadow-neoSm mb-4 font-semibold">
-            ⚠️ {validationError}
+            <span role="img" aria-label="warning icon" className="mr-2">⚠️</span> {validationError}
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -262,7 +262,15 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
               <div className="mb-6">
                 <p className="text-sm font-bold uppercase text-gray-500 mb-2">Sustainability Level</p>
                 <div className={`text-center font-display font-bold text-xl border-3 border-black p-3 rounded-lg shadow-neoSm bg-neoGreen`}>
-                  {getScoreBadgeText(latestData.sustainability_score)}
+                  {(() => {
+                    const badge = getScoreBadgeText(latestData.sustainability_score);
+                    return (
+                      <>
+                        <span role="img" aria-label={badge.label} className="mr-2">{badge.emoji}</span>
+                        {badge.label}
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
@@ -273,7 +281,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
                 {/* Transportation */}
                 <div>
                   <div className="flex justify-between font-bold text-sm mb-1">
-                    <span>🚗 Transportation ({transportPct}%)</span>
+                    <span><span role="img" aria-label="car icon" className="mr-2">🚗</span>Transportation ({transportPct}%)</span>
                     <span>{latestData.co2_transport.toFixed(1)} kg CO₂</span>
                   </div>
                   <div className="w-full bg-gray-200 border-3 border-black h-6 rounded-md overflow-hidden">
@@ -287,7 +295,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
                 {/* Electricity */}
                 <div>
                   <div className="flex justify-between font-bold text-sm mb-1">
-                    <span>⚡ Electricity ({electricityPct}%)</span>
+                    <span><span role="img" aria-label="lightning icon" className="mr-2">⚡</span>Electricity ({electricityPct}%)</span>
                     <span>{latestData.co2_electricity.toFixed(1)} kg CO₂</span>
                   </div>
                   <div className="w-full bg-gray-200 border-3 border-black h-6 rounded-md overflow-hidden">
@@ -301,7 +309,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
                 {/* Food */}
                 <div>
                   <div className="flex justify-between font-bold text-sm mb-1">
-                    <span>🥩 Diet & Food ({foodPct}%)</span>
+                    <span><span role="img" aria-label="meat icon" className="mr-2">🥩</span>Diet & Food ({foodPct}%)</span>
                     <span>{latestData.co2_food.toFixed(1)} kg CO₂</span>
                   </div>
                   <div className="w-full bg-gray-200 border-3 border-black h-6 rounded-md overflow-hidden">
@@ -315,7 +323,7 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
                 {/* Shopping */}
                 <div>
                   <div className="flex justify-between font-bold text-sm mb-1">
-                    <span>🛍️ Consumer Shopping ({shoppingPct}%)</span>
+                    <span><span role="img" aria-label="shopping bag icon" className="mr-2">🛍️</span>Consumer Shopping ({shoppingPct}%)</span>
                     <span>{latestData.co2_shopping.toFixed(1)} kg CO₂</span>
                   </div>
                   <div className="w-full bg-gray-200 border-3 border-black h-6 rounded-md overflow-hidden">
@@ -329,12 +337,12 @@ export const CalculatorView: React.FC<CalculatorViewProps> = ({
             </div>
 
             <div className="mt-6 border-t-3 border-dashed border-black pt-4 text-xs font-bold text-gray-500">
-              💡 Tip: Head over to the **AI Recommendations** or **Digital Twin Simulator** tabs to see how minor changes can slash your footprint and save you money!
+              <span role="img" aria-label="tip icon" className="mr-2">💡</span> Tip: Head over to the **AI Recommendations** or **Digital Twin Simulator** tabs to see how minor changes can slash your footprint and save you money!
             </div>
           </div>
         ) : (
           <div className="bg-white border-3 border-black p-6 rounded-xl shadow-neo h-full flex flex-col justify-center items-center text-center">
-            <div className="text-6xl mb-4">🌍</div>
+            <div className="text-6xl mb-4" role="img" aria-label="globe icon">🌍</div>
             <h3 className="text-2xl font-display font-bold mb-2">No Carbon Data Yet</h3>
             <p className="font-bold text-gray-500 max-w-sm">
               Fill out the questionnaire on the left to calculate your footprint and activate personalized sustainability guidance.

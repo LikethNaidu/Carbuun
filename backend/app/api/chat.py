@@ -120,10 +120,41 @@ def api_chat(payload: schemas.ChatQueryRequest, db: Session = Depends(get_db)):
                     "Keep up the brilliant lifestyle habits!"
                 )
                 insights.append("All categories are within budget.")
-        else:
             reply = "You haven't set up a carbon budget yet. Head over to the Budget tab to set your monthly targets and track your status!"
             insights.append("No active budget found.")
             
+    elif any(word in msg for word in ["compare", "average", "global", "standard", "national", "benchmark"]):
+        global_avg = 400.0
+        us_avg = 1200.0
+        eu_avg = 560.0
+        target_limit = 160.0
+        
+        diff_global_pct = ((co2_total - global_avg) / global_avg) * 100
+        diff_us_pct = ((co2_total - us_avg) / us_avg) * 100
+        diff_eu_pct = ((co2_total - eu_avg) / eu_avg) * 100
+        diff_target_pct = ((co2_total - target_limit) / target_limit) * 100
+        
+        reply = (
+            f"Here is how your monthly footprint of **{co2_total:.1f} kg CO2** compares to global benchmarks:\n\n"
+            f"1. **Global Average ({global_avg} kg)**: "
+            f"You are **{abs(diff_global_pct):.1f}% {'above' if diff_global_pct > 0 else 'below'}** the global average.\n"
+            f"2. **US Average ({us_avg} kg)**: "
+            f"You are **{abs(diff_us_pct):.1f}% {'above' if diff_us_pct > 0 else 'below'}** the average citizen in the US.\n"
+            f"3. **EU Average ({eu_avg} kg)**: "
+            f"You are **{abs(diff_eu_pct):.1f}% {'above' if diff_eu_pct > 0 else 'below'}** the average citizen in the EU.\n"
+            f"4. **Sustainable Limit ({target_limit} kg)**: "
+            f"You are **{abs(diff_target_pct):.1f}% {'above' if diff_target_pct > 0 else 'below'}** the target sustainable limit required to limit global warming to 1.5°C.\n\n"
+        )
+        if co2_total <= target_limit:
+            reply += "Outstanding! You are already living within the sustainable global carbon budget."
+        elif co2_total <= global_avg:
+            reply += "Good job! You are below the global average, but further action is needed to reach the 1.5°C sustainable target."
+        else:
+            reply += "Your emissions are higher than the global average. Let's focus on lowering transportation and diet emissions to make the biggest impact."
+            
+        insights.append(f"Global Avg: {global_avg} kg")
+        insights.append(f"Sustainable Target: {target_limit} kg")
+        
     else:
         reply = (
             f"Based on your profile, your total carbon footprint is **{co2_total:.1f} kg CO2/month**. "

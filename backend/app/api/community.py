@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 import datetime
 
@@ -9,7 +9,8 @@ from backend.app.schemas import schemas
 router = APIRouter(prefix="/api", tags=["community"])
 
 @router.get("/community", response_model=schemas.CommunityStatsResponse)
-def api_community(db: Session = Depends(get_db)):
+def api_community(response: Response, db: Session = Depends(get_db)):
+    response.headers["Cache-Control"] = "public, max-age=3600"
     user_count = db.query(models.UserFootprint.user_id).distinct().count()
     total_users = max(1, user_count) + 1284
     

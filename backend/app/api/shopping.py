@@ -1,10 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from backend.app.schemas import schemas
 
 router = APIRouter(prefix="/api", tags=["shopping"])
 
 @router.post("/shopping", response_model=schemas.ShoppingAdviceResponse)
-def api_shopping(payload: schemas.ShoppingAdviceRequest):
+def api_shopping(payload: schemas.ShoppingAdviceRequest, response: Response):
+    response.headers["Cache-Control"] = "public, max-age=3600"
     cat = payload.category.lower().strip()
     
     if "shoe" in cat:

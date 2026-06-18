@@ -14,6 +14,7 @@ exports.handler = async (event) => {
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
     "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Cache-Control": "public, max-age=3600",
   };
 
   const now = new Date();

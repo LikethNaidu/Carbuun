@@ -9,11 +9,14 @@ interface CommunityViewProps {
 export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) => {
   const [carbonSavedLive, setCarbonSavedLive] = useState(0);
 
-  useEffect(() => {
+  const [prevStats, setPrevStats] = useState<CommunityStats | null>(null);
+
+  if (stats !== prevStats) {
+    setPrevStats(stats);
     if (stats) {
       setCarbonSavedLive(stats.total_carbon_saved);
     }
-  }, [stats]);
+  }
 
   // Live counter animation to make the page feel alive and premium!
   useEffect(() => {
@@ -49,7 +52,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) 
           {/* Card 1: Total Users */}
           <div className="bg-white border-3 border-black p-6 rounded-xl shadow-neo flex flex-col justify-between hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">👥</span>
+              <span className="text-3xl" role="img" aria-label="people icon">👥</span>
               <h3 className="font-display font-bold text-lg">Active Champions</h3>
             </div>
             <div>
@@ -65,7 +68,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) 
           {/* Card 2: Average Score */}
           <div className="bg-white border-3 border-black p-6 rounded-xl shadow-neo flex flex-col justify-between hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">🌿</span>
+              <span className="text-3xl" role="img" aria-label="sprout icon">🌿</span>
               <h3 className="font-display font-bold text-lg">Average Eco-Score</h3>
             </div>
             <div>
@@ -81,7 +84,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) 
           {/* Card 3: Live Carbon Saved */}
           <div className="bg-white border-3 border-black p-6 rounded-xl shadow-neo flex flex-col justify-between hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all bg-neoDark text-white">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">🌳</span>
+              <span className="text-3xl" role="img" aria-label="tree icon">🌳</span>
               <h3 className="font-display font-bold text-lg text-neoGreen">Collective Savings</h3>
             </div>
             <div>
@@ -109,7 +112,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) 
         <div className="space-y-4 font-bold text-sm">
           {/* Milestone 1 */}
           <div className="flex justify-between items-center border-b-2 border-black pb-2">
-            <span>🚀 Goal: Save 50,000 kg CO₂</span>
+            <span><span role="img" aria-label="rocket icon" className="mr-1">🚀</span> Goal: Save 50,000 kg CO₂</span>
             <span className="bg-neoGreen text-black border-2 border-black px-2 py-0.5 rounded text-xs">
               {stats ? `${Math.min(100, Math.round((stats.total_carbon_saved / 50000) * 100))}% Completed` : "Loading..."}
             </span>
@@ -117,7 +120,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) 
 
           {/* Milestone 2 */}
           <div className="flex justify-between items-center border-b-2 border-black pb-2">
-            <span>🏆 Average Score Goal: Reach 75/100</span>
+            <span><span role="img" aria-label="trophy icon" className="mr-1">🏆</span> Average Score Goal: Reach 75/100</span>
             <span className="bg-neoYellow text-black border-2 border-black px-2 py-0.5 rounded text-xs">
               {stats ? `${Math.min(100, Math.round((stats.average_score / 75) * 100))}% Completed` : "Loading..."}
             </span>
@@ -125,7 +128,7 @@ export const CommunityView: React.FC<CommunityViewProps> = ({ stats, loading }) 
 
           {/* Milestone 3 */}
           <div className="flex justify-between items-center">
-            <span>👥 Target Community: 1,500 active users</span>
+            <span><span role="img" aria-label="people icon" className="mr-1">👥</span> Target Community: 1,500 active users</span>
             <span className="bg-neoBlue text-white border-2 border-black px-2 py-0.5 rounded text-xs">
               {stats ? `${Math.min(100, Math.round((stats.total_users / 1500) * 100))}% Completed` : "Loading..."}
             </span>

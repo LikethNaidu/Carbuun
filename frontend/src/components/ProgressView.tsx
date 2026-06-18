@@ -16,6 +16,28 @@ interface ProgressViewProps {
   loading: boolean;
 }
 
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ name: string; value: number; color: string }>;
+  label?: string;
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white border-3 border-black p-3.5 rounded-lg shadow-neo font-bold text-xs text-neoDark">
+        <p className="border-b-2 border-black pb-1 mb-2 font-display text-sm">{label}</p>
+        {payload.map((item, idx) => (
+          <p key={idx} style={{ color: item.color }} className="mb-0.5">
+            {item.name}: {item.value.toFixed(1)} kg CO₂
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 export const ProgressView: React.FC<ProgressViewProps> = ({ history, loading }) => {
   // Format history data for Recharts
   const chartData = history.map((entry) => {
@@ -43,22 +65,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ history, loading }) 
   const carbonSavedPct =
     initialFootprint > 0 ? Math.round((carbonSaved / initialFootprint) * 100) : 0;
 
-  // Custom tooltips matching Neo-Brutalism
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white border-3 border-black p-3.5 rounded-lg shadow-neo font-bold text-xs text-neoDark">
-          <p className="border-b-2 border-black pb-1 mb-2 font-display text-sm">{label}</p>
-          {payload.map((item: any, idx: number) => (
-            <p key={idx} style={{ color: item.color }} className="mb-0.5">
-              {item.name}: {item.value.toFixed(1)} kg CO₂
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   return (
     <div className="space-y-6">
@@ -74,7 +81,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ history, loading }) 
         <div className="text-center py-12 font-bold">Loading historical records...</div>
       ) : history.length === 0 ? (
         <div className="bg-white border-3 border-black p-12 rounded-xl text-center shadow-neo">
-          <span className="text-5xl mb-4">📈</span>
+          <span className="text-5xl mb-4" role="img" aria-label="chart increasing icon">📈</span>
           <h3 className="text-xl font-bold mb-2">No historical trends yet</h3>
           <p className="text-gray-500 font-bold">
             Create your first carbon calculation in the Calculator tab to activate history logs.

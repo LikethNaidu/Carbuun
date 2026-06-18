@@ -131,10 +131,13 @@ function App() {
 
   // On mount, fetch initial data
   useEffect(() => {
-    fetchHistory();
-    fetchBudget();
-    fetchRecommendations();
-    fetchCommunityStats();
+    const timer = setTimeout(() => {
+      fetchHistory();
+      fetchBudget();
+      fetchRecommendations();
+      fetchCommunityStats();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [fetchHistory, fetchBudget, fetchRecommendations, fetchCommunityStats]);
 
   // Handle calculator submission
@@ -290,10 +293,10 @@ function App() {
         </div>
         <div className="flex gap-2">
           <span className="bg-white border-2 border-black px-3 py-1 font-bold text-xs rounded-lg shadow-neoSm">
-            🌱 Carbon Coach
+            <span role="img" aria-label="coach icon" className="mr-1">🌱</span> Carbon Coach
           </span>
           <span className="bg-neoGreen border-2 border-black px-3 py-1 font-bold text-xs rounded-lg shadow-neoSm">
-            ⚡ Offline-First Mode
+            <span role="img" aria-label="bolt icon" className="mr-1">⚡</span> Offline-First Mode
           </span>
         </div>
       </header>
@@ -301,7 +304,7 @@ function App() {
       {/* Error Alert Box */}
       {errorMsg && (
         <div className="bg-neoOrange text-white border-3 border-black p-4 rounded-xl shadow-neo flex justify-between items-center font-bold">
-          <div>⚠️ {errorMsg}</div>
+          <div><span role="img" aria-label="warning icon" className="mr-2">⚠️</span> {errorMsg}</div>
           <button
             onClick={() => {
               setErrorMsg(null);
@@ -320,14 +323,14 @@ function App() {
       {/* Navigation Tabs */}
       <nav className="flex flex-wrap gap-3" role="tablist" aria-label="Dashboard Features">
         {[
-          { id: "calculator", label: "🌍 Calculator", color: "hover:bg-neoYellow" },
-          { id: "recommendations", label: "💡 Recommendations", color: "hover:bg-neoGreen" },
-          { id: "simulator", label: "⚡ Simulator (Twin)", color: "hover:bg-neoOrange hover:text-white" },
-          { id: "budget", label: "📊 Carbon Budget", color: "hover:bg-neoBlue hover:text-white" },
-          { id: "assistant", label: "🤖 Smart Coach", color: "hover:bg-neoGreen" },
-          { id: "shopping", label: "🛍️ Shop Advisor", color: "hover:bg-neoYellow" },
-          { id: "trends", label: "📈 Trends & Goals", color: "hover:bg-neoBlue hover:text-white" },
-          { id: "community", label: "👥 Community Hub", color: "hover:bg-neoOrange hover:text-white" },
+          { id: "calculator", emoji: "🌍", label: "Calculator", color: "hover:bg-neoYellow" },
+          { id: "recommendations", emoji: "💡", label: "Recommendations", color: "hover:bg-neoGreen" },
+          { id: "simulator", emoji: "⚡", label: "Simulator (Twin)", color: "hover:bg-neoOrange hover:text-white" },
+          { id: "budget", emoji: "📊", label: "Carbon Budget", color: "hover:bg-neoBlue hover:text-white" },
+          { id: "assistant", emoji: "🤖", label: "Smart Coach", color: "hover:bg-neoGreen" },
+          { id: "shopping", emoji: "🛍️", label: "Shop Advisor", color: "hover:bg-neoYellow" },
+          { id: "trends", emoji: "📈", label: "Trends & Goals", color: "hover:bg-neoBlue hover:text-white" },
+          { id: "community", emoji: "👥", label: "Community Hub", color: "hover:bg-neoOrange hover:text-white" },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -344,6 +347,7 @@ function App() {
                   : `bg-white text-neoDark hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo ${tab.color}`
               }`}
             >
+              <span role="img" aria-label={tab.label} className="mr-2">{tab.emoji}</span>
               {tab.label}
             </button>
           );

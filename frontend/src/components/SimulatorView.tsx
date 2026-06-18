@@ -64,7 +64,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="public_transport_days" className="font-bold text-neoDark">
-                🚌 Commute by Public Transport
+                <span role="img" aria-label="bus icon" className="mr-1">🚌</span> Commute by Public Transport
               </label>
               <span className="bg-neoOrange text-white border-3 border-black px-2 py-0.5 rounded-lg text-sm font-bold shadow-neoSm">
                 {inputs.public_transport_days} days/week
@@ -90,7 +90,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="electricity_reduction_pct" className="font-bold text-neoDark">
-                ⚡ Reduce Electricity Usage
+                <span role="img" aria-label="lightning icon" className="mr-1">⚡</span> Reduce Electricity Usage
               </label>
               <span className="bg-neoYellow text-black border-3 border-black px-2 py-0.5 rounded-lg text-sm font-bold shadow-neoSm">
                 {inputs.electricity_reduction_pct}% reduction
@@ -116,7 +116,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="vegetarian_days" className="font-bold text-neoDark">
-                🥗 Vegetarian Days
+                <span role="img" aria-label="salad icon" className="mr-1">🥗</span> Vegetarian Days
               </label>
               <span className="bg-neoGreen text-black border-3 border-black px-2 py-0.5 rounded-lg text-sm font-bold shadow-neoSm">
                 {inputs.vegetarian_days} days/week
@@ -188,7 +188,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
                 {/* Carbon Saved */}
                 <div className="flex items-center justify-between border-3 border-black p-3 rounded-lg shadow-neoSm bg-white">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">🌳</span>
+                    <span className="text-2xl" role="img" aria-label="tree icon">🌳</span>
                     <div>
                       <p className="font-bold text-sm">Carbon Saved Yearly</p>
                       <p className="text-xs text-gray-400 font-bold">Equivalent to planting {Math.round(result.annual_saving_co2 / 22)} trees</p>
@@ -202,7 +202,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
                 {/* Money Saved */}
                 <div className="flex items-center justify-between border-3 border-black p-3 rounded-lg shadow-neoSm bg-white">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">💵</span>
+                    <span className="text-2xl" role="img" aria-label="money icon">💵</span>
                     <div>
                       <p className="font-bold text-sm">Money Saved Yearly</p>
                       <p className="text-xs text-gray-400 font-bold">Estimated utility & fuel cost savings</p>
@@ -216,7 +216,7 @@ export const SimulatorView: React.FC<SimulatorViewProps> = ({
             </div>
 
             <div className="mt-6 border-t-3 border-dashed border-black pt-4 text-xs font-bold text-gray-500">
-              ⚡ This simulator replicates a digital twin of your carbon output. By taking action on these variables in your real life, you can match these outcomes!
+              <span role="img" aria-label="lightning icon" className="mr-1">⚡</span> This simulator replicates a digital twin of your carbon output. By taking action on these variables in your real life, you can match these outcomes!
             </div>
           </div>
         ) : (

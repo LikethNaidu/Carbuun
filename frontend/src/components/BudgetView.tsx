@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import type { CarbonBudget, FootprintData } from "../types";
 
 interface BudgetViewProps {
@@ -24,7 +24,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
   const [editMode, setEditMode] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  useEffect(() => {
+  const [prevBudget, setPrevBudget] = useState<CarbonBudget | null>(null);
+
+  if (budget !== prevBudget) {
+    setPrevBudget(budget);
     if (budget) {
       setFormData({
         budget_transport: budget.budget_transport,
@@ -33,7 +36,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
         budget_shopping: budget.budget_shopping,
       });
     }
-  }, [budget]);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -127,7 +130,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
         {successMsg && (
           <div className="bg-neoGreen text-black border-3 border-black p-3 rounded-lg shadow-neoSm font-bold">
-            ✅ {successMsg}
+            <span role="img" aria-label="check icon">✅</span> {successMsg}
           </div>
         )}
 
@@ -151,7 +154,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           </div>
           <div className="text-center font-bold">
             {totalUsage > totalBudget ? (
-              <span className="text-neoOrange text-sm">⚠️ Over Budget!</span>
+              <span className="text-neoOrange text-sm"><span role="img" aria-label="warning icon">⚠️</span> Over Budget!</span>
             ) : (
               <span className="text-neoGreen text-sm">✓ Under Budget</span>
             )}
@@ -172,11 +175,11 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               >
                 {isOver && (
                   <div className="absolute top-2 right-2 bg-neoOrange text-white border-3 border-black px-2 py-0.5 rounded-lg text-xs font-bold shadow-neoSm animate-bounce">
-                    🚨 OVER LIMIT!
+                    <span role="img" aria-label="alert icon">🚨</span> OVER LIMIT!
                   </div>
                 )}
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">{cat.icon}</span>
+                  <span className="text-2xl" role="img" aria-label={cat.label}>{cat.icon}</span>
                   <h3 className="font-display font-bold text-lg">{cat.label}</h3>
                 </div>
 
@@ -222,7 +225,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="budget_transport" className="block text-xs uppercase font-bold text-gray-500 mb-1">
-                🚗 Transportation Limit (kg CO₂/mo)
+                <span role="img" aria-label="car icon">🚗</span> Transportation Limit (kg CO₂/mo)
               </label>
               <input
                 id="budget_transport"
@@ -236,7 +239,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </div>
             <div>
               <label htmlFor="budget_electricity" className="block text-xs uppercase font-bold text-gray-500 mb-1">
-                ⚡ Electricity Limit (kg CO₂/mo)
+                <span role="img" aria-label="lightning icon">⚡</span> Electricity Limit (kg CO₂/mo)
               </label>
               <input
                 id="budget_electricity"
@@ -250,7 +253,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </div>
             <div>
               <label htmlFor="budget_food" className="block text-xs uppercase font-bold text-gray-500 mb-1">
-                🥩 Diet & Food Limit (kg CO₂/mo)
+                <span role="img" aria-label="meat icon">🥩</span> Diet & Food Limit (kg CO₂/mo)
               </label>
               <input
                 id="budget_food"
@@ -264,7 +267,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </div>
             <div>
               <label htmlFor="budget_shopping" className="block text-xs uppercase font-bold text-gray-500 mb-1">
-                🛍️ Shopping Limit (kg CO₂/mo)
+                <span role="img" aria-label="shopping bag icon">🛍️</span> Shopping Limit (kg CO₂/mo)
               </label>
               <input
                 id="budget_shopping"
@@ -301,19 +304,19 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </p>
             <div className="space-y-2 border-3 border-black p-4 bg-neoBackground rounded-lg font-bold">
               <div className="flex justify-between">
-                <span>🚗 Transport:</span>
+                <span><span role="img" aria-label="car icon">🚗</span> Transport:</span>
                 <span>{formData.budget_transport} kg</span>
               </div>
               <div className="flex justify-between">
-                <span>⚡ Electricity:</span>
+                <span><span role="img" aria-label="lightning icon">⚡</span> Electricity:</span>
                 <span>{formData.budget_electricity} kg</span>
               </div>
               <div className="flex justify-between">
-                <span>🥩 Diet & Food:</span>
+                <span><span role="img" aria-label="meat icon">🥩</span> Diet & Food:</span>
                 <span>{formData.budget_food} kg</span>
               </div>
               <div className="flex justify-between">
-                <span>🛍️ Shopping:</span>
+                <span><span role="img" aria-label="shopping bag icon">🛍️</span> Shopping:</span>
                 <span>{formData.budget_shopping} kg</span>
               </div>
               <div className="border-t-3 border-black pt-2 flex justify-between font-display text-lg">
@@ -325,7 +328,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               onClick={() => setEditMode(true)}
               className="w-full bg-neoYellow text-black border-3 border-black font-display font-bold py-2.5 rounded-lg shadow-neo hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neoLg transition-all active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-2"
             >
-              ⚙ Edit Budget Targets
+              <span role="img" aria-label="settings icon">⚙</span> Edit Budget Targets
             </button>
           </div>
         )}

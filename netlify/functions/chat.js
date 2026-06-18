@@ -96,6 +96,34 @@ exports.handler = async (event) => {
       reply = `Your top emission source is **${maxCat[0]}** at ${maxCat[1].toFixed(1)} kg CO₂/month. Quick win: ${tips[maxCat[0]]}`;
       insights.push(`Highest emission: ${maxCat[0]}`);
 
+    } else if (["compare", "average", "global", "standard", "national", "benchmark"].some(x => msg.includes(x))) {
+      const global_avg = 400.0;
+      const us_avg = 1200.0;
+      const eu_avg = 560.0;
+      const target_limit = 160.0;
+      
+      const diff_global_pct = ((co2_total - global_avg) / global_avg) * 100;
+      const diff_us_pct = ((co2_total - us_avg) / us_avg) * 100;
+      const diff_eu_pct = ((co2_total - eu_avg) / eu_avg) * 100;
+      const diff_target_pct = ((co2_total - target_limit) / target_limit) * 100;
+      
+      reply = `Here is how your monthly footprint of **${co2_total.toFixed(1)} kg CO₂** compares to global benchmarks:\n\n` +
+              `1. **Global Average (${global_avg} kg)**: You are **${Math.abs(diff_global_pct).toFixed(1)}% ${diff_global_pct > 0 ? "above" : "below"}** the global average.\n` +
+              `2. **US Average (${us_avg} kg)**: You are **${Math.abs(diff_us_pct).toFixed(1)}% ${diff_us_pct > 0 ? "above" : "below"}** the average citizen in the US.\n` +
+              `3. **EU Average (${eu_avg} kg)**: You are **${Math.abs(diff_eu_pct).toFixed(1)}% ${diff_eu_pct > 0 ? "above" : "below"}** the average citizen in the EU.\n` +
+              `4. **Sustainable Limit (${target_limit} kg)**: You are **${Math.abs(diff_target_pct).toFixed(1)}% ${diff_target_pct > 0 ? "above" : "below"}** the target sustainable limit required to limit global warming to 1.5°C.\n\n`;
+              
+      if (co2_total <= target_limit) {
+        reply += "Outstanding! You are already living within the sustainable global carbon budget.";
+      } else if (co2_total <= global_avg) {
+        reply += "Good job! You are below the global average, but further action is needed to reach the 1.5°C sustainable target.";
+      } else {
+        reply += "Your emissions are higher than the global average. Let's focus on lowering transportation and diet emissions to make the biggest impact.";
+      }
+      
+      insights.push(`Global Avg: ${global_avg} kg`);
+      insights.push(`Sustainable Target: ${target_limit} kg`);
+
     } else {
       const cats = [["Transportation", co2_transport], ["Electricity", co2_electricity], ["Food", co2_food], ["Shopping", co2_shopping]];
       const maxCat = cats.reduce((a, b) => b[1] > a[1] ? b : a);

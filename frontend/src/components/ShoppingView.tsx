@@ -104,7 +104,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({
                   >
                     <div className="flex-1 space-y-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-xl">🌿</span>
+                        <span className="text-xl" role="img" aria-label="sprout icon">🌿</span>
                         <h4 className="font-display font-bold text-lg">{alt.name}</h4>
                       </div>
                       <p className="text-sm font-bold text-neoDark">

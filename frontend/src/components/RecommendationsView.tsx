@@ -51,7 +51,7 @@ export const RecommendationsView: React.FC<RecommendationsViewProps> = ({
         <div className="text-center py-12 font-bold">Loading recommendations...</div>
       ) : recommendations.length === 0 ? (
         <div className="bg-white border-3 border-black p-12 rounded-xl text-center shadow-neo">
-          <div className="text-5xl mb-4">🌱</div>
+          <div className="text-5xl mb-4" role="img" aria-label="sprout icon">🌱</div>
           <h3 className="text-xl font-bold mb-2">No recommendations available yet</h3>
           <p className="text-gray-500 font-bold">Complete the footprint calculator to generate your recommendations.</p>
         </div>

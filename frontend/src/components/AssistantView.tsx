@@ -70,31 +70,31 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
               onClick={() => setInput("How is my travel footprint looking?")}
               className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoOrange hover:text-white transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
-              🚗 Travel footprint analysis
+              <span role="img" aria-label="car icon" className="mr-1">🚗</span> Travel footprint analysis
             </button>
             <button
               onClick={() => setInput("Tips for reducing my home electricity emissions?")}
               className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoYellow hover:text-black transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
-              ⚡ Electricity saving advice
+              <span role="img" aria-label="lightning icon" className="mr-1">⚡</span> Electricity saving advice
             </button>
             <button
               onClick={() => setInput("What impact does my food preference have?")}
               className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoGreen hover:text-black transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
-              🥩 Meat vs Plant diet impact
+              <span role="img" aria-label="meat icon" className="mr-1">🥩</span> Meat vs Plant diet impact
             </button>
             <button
               onClick={() => setInput("Am I exceeding my carbon budget limits?")}
               className="w-full text-left bg-neoBackground border-3 border-black p-2.5 rounded-lg text-xs font-bold shadow-neoSm hover:bg-neoBlue hover:text-white transition-all text-neoDark focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black focus-visible:ring-offset-1"
             >
-              📊 Check budget limits
+              <span role="img" aria-label="chart icon" className="mr-1">📊</span> Check budget limits
             </button>
           </div>
         </div>
 
         <div className="border-t-3 border-dashed border-black pt-3 mt-4 text-xs font-bold text-gray-400">
-          🌱 Powered by GreenGuide AI engine, reasoning contextually based on your profile input.
+          <span role="img" aria-label="sprout icon" className="mr-1">🌱</span> Powered by GreenGuide AI engine, reasoning contextually based on your profile input.
         </div>
       </div>
 
@@ -102,7 +102,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
       <div className="bg-white border-3 border-black rounded-xl shadow-neo lg:col-span-3 flex flex-col justify-between h-full overflow-hidden">
         {/* Chat Header */}
         <div className="bg-neoDark text-white p-4 border-b-3 border-black flex items-center gap-3">
-          <div className="text-2xl bg-neoGreen p-1.5 rounded-lg border-2 border-white">🤖</div>
+          <div className="text-2xl bg-neoGreen p-1.5 rounded-lg border-2 border-white"><span role="img" aria-label="robot icon">🤖</span></div>
           <div>
             <h3 className="font-display font-bold">GreenGuide AI Assistant</h3>
             <p className="text-xs text-neoGreen font-bold">Online • Ready to Coach</p>
@@ -113,7 +113,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         <div className="flex-1 p-4 overflow-y-auto bg-neoBackground space-y-4" aria-live="polite" aria-relevant="additions">
           {chatHistory.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-6">
-              <span className="text-5xl mb-3">💬</span>
+              <span className="text-5xl mb-3" role="img" aria-label="speech balloon">💬</span>
               <h4 className="font-display font-bold text-lg mb-1">Start a Conversation</h4>
               <p className="text-xs text-gray-500 font-bold max-w-xs">
                 Greetings! Ask me questions, and I will reason dynamically using your footprint stats.
@@ -146,7 +146,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                             key={idx}
                             className="bg-neoYellow text-black border-2 border-black text-[10px] px-1.5 py-0.5 rounded font-bold"
                           >
-                            💡 {insight}
+                            <span role="img" aria-label="idea icon" className="mr-1">💡</span> {insight}
                           </span>
                         ))}
                       </div>
