@@ -2,9 +2,14 @@
 
 **Chosen Vertical**: Sustainability & Environment
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/elegant-parfait-4cc2a7/deploy-status)](https://app.netlify.com/projects/elegant-parfait-4cc2a7/deploys)
+
+🌐 **Live Demo**: [https://elegant-parfait-4cc2a7.netlify.app](https://elegant-parfait-4cc2a7.netlify.app)
+
 GreenGuide AI is a personal carbon footprint tracking, forecasting, and reduction assistant designed to empower users to understand and minimize their environmental impact. Using a playfull yet professional **Neo-Brutalism UI** design, the application bridges the gap between calculating emissions and taking actionable steps to live a carbon-conscious life.
 
 ---
+
 
 ## Problem Statement
 
