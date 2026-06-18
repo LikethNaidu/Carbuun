@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neoGreen: #00FF88;
+  --color-neoYellow: #FFE500;
+  --color-neoBlue: #0099FF;
+  --color-neoOrange: #FF6B35;
+  --color-neoBackground: #FFFDF0;
+  --color-neoDark: #1A1A1A;
+
+  --shadow-neo: 4px 4px 0px 0px #000000;
+  --shadow-neoLg: 8px 8px 0px 0px #000000;
+  --shadow-neoSm: 2px 2px 0px 0px #000000;
+
+  --border-width-3: 3px;
+
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+body {
+  background-color: var(--color-neoBackground);
+  color: var(--color-neoDark);
+  font-family: var(--font-sans);
+}
+
+/* Custom Neo-Brutalist scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFDF0;
+  border-left: 3px solid #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #00FF88;
+  border: 3px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FFE500;
+}
